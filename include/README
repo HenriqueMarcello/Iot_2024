@@ -1,0 +1,23 @@
+Este diretório é destinado a arquivos de cabeçalho do projeto.
+
+Um arquivo de cabeçalho é um arquivo que contém declarações em C e definições de macros para serem compartilhadas entre vários arquivos fonte do projeto. Você solicita o uso de um arquivo de cabeçalho no arquivo fonte do projeto (C, C++, etc) localizado na pasta `src` incluindo-o com a diretiva de pré-processamento C `#include`.
+
+#include "header.h"
+
+int main (void)
+{
+ ...
+}
+
+Incluir um arquivo de cabeçalho produz os mesmos resultados que copiar o arquivo de cabeçalho em cada arquivo fonte que precisa dele. Essa cópia seria demorada e sujeita a erros. Com um arquivo de cabeçalho, as declarações relacionadas aparecem em apenas um lugar. Se elas precisarem ser alteradas, podem ser alteradas em um único lugar, e os programas que incluem o arquivo de cabeçalho automaticamente usarão a nova versão na próxima recompilação. O arquivo de cabeçalho elimina o trabalho de encontrar e alterar todas as cópias, bem como o risco de que a falha em encontrar uma cópia resulte em inconsistências dentro de um programa.
+
+Em C, a convenção usual é dar aos arquivos de cabeçalho nomes que terminem com `.h`. É mais portável usar apenas letras, dígitos, traços e sublinhados nos nomes dos arquivos de cabeçalho, e no máximo um ponto.
+
+Leia mais sobre o uso de arquivos de cabeçalho na documentação oficial do GCC:
+
+ * Sintaxe de Inclusão
+ * Operação de Inclusão
+ * Cabeçalhos de Inclusão Única
+ * Inclusões Computadas
+
+ https://gcc.gnu.org/onlinedocs/cpp/Header-Files.html
