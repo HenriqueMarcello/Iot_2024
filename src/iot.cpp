@@ -1,20 +1,23 @@
+
 #include <Arduino.h>
 #include <WiFi.h>
 #include <PubSubClient.h>
 #include <WiFiClientSecure.h>
 #include <ArduinoJson.h>
 #include <TimeLib.h>
+#include <ESP32Servo.h>
 #include "iot.h"
 #include "senhas.h"
 #include "saidas.h"
 #include "atuadores.h"
 #include "funcoes.h"
+#include "umidificador.h"
+#include "motorDC.h"
 
-#include <Wire.h>
-#define USUARIO_PADRAO "!@#$%^&*()xyz"
+#define USUARIO_PADRAO "!@#$%^&*()xym"
 
 // Definição dos tópicos MQTT
-#define mqtt_topic1 "projeto_integrado/SENAI134/Cienciadedados/Grupoprime"
+#define mqtt_topic1 "projetoIluminatti/1"
 #define mqtt_topic2 ""
 #define mqtt_topic3 ""
 
@@ -173,10 +176,40 @@ void tratar_msg(char *topic, String msg)
             tempoSenhaEstendido(); //estende o tempo da senha, ao espirar o usuario autorizado volta a ser o padrao
 
             //! ******** USUARIO AUTORIZADO APARTIR DAQUI ***********/
-            if (doc.containsKey("LedState"))
+            if (doc.containsKey("LedSinal")) 
             {
-              LedBuiltInState = doc["LedState"];
+             estadoLed = doc["LedSinal"];
             }
+          }
+            
+                // Controle do umidificador através do JSON
+                    if (doc.containsKey("Umidificador")) // Se o campo Umidificador estiver presente
+                    {
+                        String acaoUmidificador = doc["Umidificador"]; // "ligar" ou "desligar"
+                        
+                        if (acaoUmidificador == "ligar")
+                        {
+                            // Chama a função para pulsar o umidificador
+                            pulsoUmidificador();
+                        }
+                        else if (acaoUmidificador == "desligar")
+                        {
+                            desligaUmidificador();
+                        }
+                    }
+              // Controle do servo através do JSON
+            if (doc.containsKey("portaAberta")) // Se o campo porta estiver presente
+            {
+              String acaoPorta = doc["portaAberta"]; // "abrir" ou "fechar"
+              
+              if (acaoPorta == "abrir")
+              {
+                Servoloop();
+              }
+             
+              
+               
+          
 
             //! ******** USUARIO AUTORIZADO ATÉ AQUI ***********/
           }
@@ -185,14 +218,14 @@ void tratar_msg(char *topic, String msg)
     }
   }
 
-  // TODO TRATAR MENSSAGENS RECEBIDAS DO TOPICO2
+  // TODO TRATAR MENSSAGENS RECEBIDAS DO TOPICO2 DO NODE-RED
   else if (strcmp(topic, mqtt_topic2) == 0)
   {
 
   }
 
-  // TODO TRATAR MENSSAGENS RECEBIDAS DO TOPICO3
-  else if (strcmp(topic, mqtt_topic3) == 0)
+  // TODO TRATAR MENSSAGENS RECEBIDAS DO TOPICO3 DO APP INVENTOR
+  else if (strcmp(topic, mqtt_topic3) == 0) 
   {
 
   }

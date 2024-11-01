@@ -1,12 +1,18 @@
 
-//Inicializa as saídas digitais
 void inicializa_saidas();
 
-//Atualiza as saídas digitais
 void atualiza_saidas();
 
-//Variavel que controla o LED da placa
-extern bool LedBuiltInState;
 
-//Varial que controla o LED externo
-extern bool LedExternoState;
+
+#define LED_SINAL_PIN 34        // Pino para o LED
+
+
+extern unsigned long tempoAnterior;
+extern const unsigned long intervalo;
+
+extern bool senhaCorreta;
+
+extern const float alturaReservatorio;
+
+extern float distanciaMedida;
